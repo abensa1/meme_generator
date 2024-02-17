@@ -61,19 +61,27 @@ def meme_post():
 
 
     if img_data.status_code == 200:
-        img = "./temp_image.jpg"
+        img = "./temp/temp_image.jpg"
 
-        with open(img, "wb") as im:
-            im.write(img_data.content)
+        image = Image.open(BytesIO(img_data.content))
+        try:
+            if image.mode != "RGB":
+                image = image.convert("RGB")
+        except OSError as e:
+            print(f"can't open file -- {image.mode} -- {e}")
 
-        body = request.form("body","")
-        author = request.form("author","")
-        path = meme.make_meme(img, body, author)
+        image.save(img)
+        # with open(img, "wb") as im:
+        #     im.write(img_data.content)
+
+        body = request.form.get("body","")
+        author = request.form.get("author","")
+        path = meme.make_meme(img, text=body, author=author)
         os.remove(img)
-
         return render_template('meme.html', path=path)
     else:
         raise ValueError('Failed to Download Image')
+    
 
 if __name__ == "__main__":
     app.run(debug=True)

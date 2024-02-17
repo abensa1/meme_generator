@@ -4,7 +4,7 @@ import os
 class MemeGenerator():
 
     def __init__(self, 
-                 img_save_path: str = './output',
+                 img_save_path: str = './static',
                  img_load_path: str = None,
                  text: str = "", 
                  author: str = "", 
@@ -57,10 +57,12 @@ class MemeGenerator():
         self.image.save(meme_save_path)
         return meme_save_path
 
-    def make_meme(self, img_load_path, text, author, img_save_path='./output', width=500):
+    def make_meme(self, img_load_path, text, author, img_save_path='./static', width=500):
         self.load_image(img_load_path)
         self.text = text
         self.author = author
         self.resize_image(width)
+
+        # return  self.load_image(img_load_path)
 
         return self.add_caption_and_save(img_save_path)
